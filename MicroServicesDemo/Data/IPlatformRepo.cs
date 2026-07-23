@@ -4,7 +4,7 @@ namespace MicroServicesDemo.Data
 {
     public interface IPlatformRepo
     {
-        bool Savechanges();
+        bool SaveChanges();
         IEnumerable<Platform> GetAllPlatforms();
         Platform GetPlatformById(int id);
         void CreatePlatform(Platform plat);

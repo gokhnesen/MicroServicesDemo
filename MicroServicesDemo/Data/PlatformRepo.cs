@@ -31,7 +31,7 @@ namespace MicroServicesDemo.Data
             return _context.Platforms.FirstOrDefault(p => p.Id == id);
         }
 
-        public bool Savechanges()
+        public bool SaveChanges()
         {
             return (_context.SaveChanges() >= 0);
         }
