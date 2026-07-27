@@ -1,0 +1,9 @@
+**/.dockerignore
+**/bin/
+**/obj/
+**/.vs/
+**/.git/
+**/.gitignore
+**/Dockerfile*
+**/*.md
+**/Properties/launchSettings.json
