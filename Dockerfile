@@ -1,10 +1,11 @@
-FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
-COPY ["MicroServicesDemo.csproj", "./"]
-RUN dotnet restore "MicroServicesDemo.csproj"
+COPY ["MicroServicesDemo/MicroServicesDemo.csproj", "MicroServicesDemo/"]
+RUN dotnet restore "MicroServicesDemo/MicroServicesDemo.csproj"
 
 COPY . .
+WORKDIR /src/MicroServicesDemo
 RUN dotnet publish "MicroServicesDemo.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
