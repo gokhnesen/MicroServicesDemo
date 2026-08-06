@@ -1,5 +1,6 @@
 
 using MicroServicesDemo.Data;
+using MicroServicesDemo.SyncDataServices.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace MicroServicesDemo
@@ -14,11 +15,13 @@ namespace MicroServicesDemo
                 options.UseInMemoryDatabase("InMem"));
 
             builder.Services.AddScoped<IPlatformRepo,PlatformRepo>();
+            builder.Services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
 
             builder.Services.AddControllers();
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            Console.WriteLine($"CommandService URL: {builder.Configuration["CommandService"]}");
 
             var app = builder.Build();
 
