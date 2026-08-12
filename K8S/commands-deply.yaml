@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: microservicedemo
+  name: commands-deply
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: microservicedemo
+      app: commandservice
   template:
     metadata:
       labels:
-        app: microservicedemo
+        app: commandservice
     spec:
       containers:
-      - name: microservicedemo
+      - name: commandservice
         image: gokobro/gokhnesen:v1
         ports:
         - containerPort: 8080
@@ -26,13 +26,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: microservicedemo-clusterip-srv
+  name: commands-clusterip-srv
 spec:
   type: ClusterIP
   selector:
-    app: microservicedemo
+    app: commandservice
   ports:
-  - name: microservicedemo
+  - name: commandservice
     protocol: TCP
     port: 80
     targetPort: 80
