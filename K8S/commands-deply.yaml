@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: commandservice
-        image: gokobro/gokhnesen:v1
+        image: gokobro/microservicedemo
         ports:
         - containerPort: 8080
         env:

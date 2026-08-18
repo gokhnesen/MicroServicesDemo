@@ -4,30 +4,25 @@ namespace MicroServicesDemo.Data
 {
     public static class PrepDb
     {
-        public static void PrepPopulation(IApplicationBuilder app, bool isProduction)
+        public static void PrepPopulation(IApplicationBuilder app)
         {
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
-                SeedData(serviceScope.ServiceProvider.GetService<AppDbContext>(), isProduction);
+                SeedData(serviceScope.ServiceProvider.GetService<AppDbContext>());
             }
         }
 
 
-        private static void SeedData(AppDbContext context, bool isProduction)
+        private static void SeedData(AppDbContext context)
         {
-            if(isProduction)
+            Console.WriteLine("--> Attempting to apply migrations...");
+            try
             {
-                Console.WriteLine("--> Attempting to apply migrations...");
-                try
-                {
-                    context.Database.Migrate();
-                }
-                catch (System.Exception ex)
-                {
-                    
-                    Console.WriteLine($"--> Could not run migrations: {ex.Message}");
-                }
-                
+                context.Database.Migrate();
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine($"--> Could not run migrations: {ex.Message}");
             }
             if(!context.Platforms.Any())
             {

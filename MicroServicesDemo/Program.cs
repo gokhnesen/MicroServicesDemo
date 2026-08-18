@@ -11,18 +11,9 @@ namespace MicroServicesDemo
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            if(builder.Environment.IsProduction())
-            {
-                Console.WriteLine("--> Using SqlServer Db");
-                builder.Services.AddDbContext<Data.AppDbContext>(options =>
-                    options.UseSqlServer(builder.Configuration.GetConnectionString("PlatformsConn")));
-            }
-            else
-            {
-                Console.WriteLine("--> Using InMem Db");
+            Console.WriteLine("--> Using SqlServer Db");
             builder.Services.AddDbContext<Data.AppDbContext>(options =>
-                options.UseInMemoryDatabase("InMem"));
-            }
+                options.UseSqlServer(builder.Configuration.GetConnectionString("PlatformsConn")));
             builder.Services.AddScoped<IPlatformRepo,PlatformRepo>();
             builder.Services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
 
@@ -49,7 +40,7 @@ namespace MicroServicesDemo
 
             app.UseRouting();
 
-            //PrepDb.PrepPopulation(app,builder.Environment.IsProduction());
+            PrepDb.PrepPopulation(app);
 
             app.Run();
         }

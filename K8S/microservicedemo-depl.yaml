@@ -14,14 +14,15 @@ spec:
     spec:
       containers:
       - name: microservicedemo
-        image: gokobro/gokhnesen:v1
+        image: gokobro/microservicedemo
+        imagePullPolicy: Never
         ports:
         - containerPort: 8080
         env:
         - name: ASPNETCORE_URLS
           value: "http://+:8080"
         - name: ASPNETCORE_ENVIRONMENT
-          value: "Development"
+          value: "Production"
 ---
 apiVersion: v1
 kind: Service
