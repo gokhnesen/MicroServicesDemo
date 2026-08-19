@@ -36,4 +36,8 @@ spec:
   - name: microservicedemo
     protocol: TCP
     port: 80
-    targetPort: 80
+    targetPort: 8080
+  - name: microservicedemo-grpc
+    protocol: TCP
+    port: 666
+    targetPort: 666

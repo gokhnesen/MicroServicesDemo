@@ -17,7 +17,21 @@ spec:
                 name: microservicedemo-clusterip-srv
                 port:
                   number: 80
+          - path: /swagger
+            pathType: Prefix
+            backend:
+              service:
+                name: microservicedemo-clusterip-srv
+                port:
+                  number: 80
           - path: /api/c
+            pathType: Prefix
+            backend:
+              service:
+                name: commands-clusterip-srv
+                port:
+                  number: 80
+          - path: /commands/swagger
             pathType: Prefix
             backend:
               service:

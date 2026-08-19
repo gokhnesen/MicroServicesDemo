@@ -1,12 +1,11 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
-COPY ["MicroServicesDemo/MicroServicesDemo.csproj", "MicroServicesDemo/"]
-RUN dotnet restore "MicroServicesDemo/MicroServicesDemo.csproj"
+COPY ["CommandService/CommandsService.csproj", "CommandService/"]
+RUN dotnet restore "CommandService/CommandsService.csproj"
 
-COPY . .
-WORKDIR /src/MicroServicesDemo
-RUN dotnet publish "MicroServicesDemo.csproj" -c Release -o /app/publish /p:UseAppHost=false
+COPY CommandService/ CommandService/
+RUN dotnet publish "CommandService/CommandsService.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app

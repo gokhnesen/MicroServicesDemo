@@ -1,4 +1,5 @@
 
+using MicroServicesDemo.AsyncDataServices;
 using MicroServicesDemo.Data;
 using MicroServicesDemo.SyncDataServices.Http;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ namespace MicroServicesDemo
                 options.UseSqlServer(builder.Configuration.GetConnectionString("PlatformsConn")));
             builder.Services.AddScoped<IPlatformRepo,PlatformRepo>();
             builder.Services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
+            builder.Services.AddSingleton<IMessageBusClient, MessageBusClient>();
 
             builder.Services.AddControllers();
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -25,13 +27,9 @@ namespace MicroServicesDemo
 
             var app = builder.Build();
 
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
-            //app.UseHttpsRedirection();
 
             app.UseAuthorization();
 

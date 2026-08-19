@@ -14,14 +14,15 @@ spec:
     spec:
       containers:
       - name: commandservice
-        image: gokobro/microservicedemo
+        image: gokobro/commandservice
+        imagePullPolicy: Never
         ports:
         - containerPort: 8080
         env:
         - name: ASPNETCORE_URLS
           value: "http://+:8080"
         - name: ASPNETCORE_ENVIRONMENT
-          value: "Development"
+          value: "Production"
 ---
 apiVersion: v1
 kind: Service
@@ -35,4 +36,4 @@ spec:
   - name: commandservice
     protocol: TCP
     port: 80
-    targetPort: 80
+    targetPort: 8080
