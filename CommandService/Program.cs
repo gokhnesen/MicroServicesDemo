@@ -3,6 +3,7 @@ using CommandsService.AsyncDataServices;
 using CommandsService.Data;
 using CommandsService.EventProcessing;
 using Microsoft.EntityFrameworkCore;
+using SyncDataServices.Grpc;
 
 namespace CommandService
 {
@@ -20,27 +21,35 @@ namespace CommandService
             builder.Services.AddHostedService<MessageBusSubscriber>();
             builder.Services.AddSingleton<IEventProcessor, EventProcessor>();
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            builder.Services.AddScoped<IPlatformDataClient, PlatformDataClient>();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
 
-            app.UseSwagger(c =>
+            if (app.Environment.IsProduction())
             {
-                c.RouteTemplate = "commands/swagger/{documentName}/swagger.json";
-            });
-            app.UseSwaggerUI(c =>
+                app.UseSwagger(c => c.RouteTemplate = "commands/swagger/{documentName}/swagger.json");
+                app.UseSwaggerUI(c =>
+                {
+                    c.RoutePrefix = "commands/swagger";
+                    c.SwaggerEndpoint("/commands/swagger/v1/swagger.json", "Commands API V1");
+                });
+            }
+            else
             {
-                c.SwaggerEndpoint("/commands/swagger/v1/swagger.json", "Commands API");
-                c.RoutePrefix = "commands/swagger";
-            });
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseAuthorization();
 
 
             app.MapControllers();
+
+            PrebDb.PrepPopulation(app);
 
             app.Run();
         }

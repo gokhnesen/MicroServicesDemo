@@ -3,6 +3,7 @@ using MicroServicesDemo.AsyncDataServices;
 using MicroServicesDemo.Data;
 using MicroServicesDemo.SyncDataServices.Http;
 using Microsoft.EntityFrameworkCore;
+using SyncDataServices.Http.Grpc;
 
 namespace MicroServicesDemo
 {
@@ -18,6 +19,7 @@ namespace MicroServicesDemo
             builder.Services.AddScoped<IPlatformRepo,PlatformRepo>();
             builder.Services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
             builder.Services.AddSingleton<IMessageBusClient, MessageBusClient>();
+            builder.Services.AddGrpc();
 
             builder.Services.AddControllers();
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -30,13 +32,15 @@ namespace MicroServicesDemo
             app.UseSwagger();
             app.UseSwaggerUI();
 
-
+            app.UseRouting();
             app.UseAuthorization();
 
-
             app.MapControllers();
-
-            app.UseRouting();
+            app.MapGrpcService<GrpcPlatformService>();
+            app.MapGet("/protos/platform.proto", async context =>
+            {
+                await context.Response.WriteAsync(await File.ReadAllTextAsync("Protos/platform.proto"));
+            });
 
             PrepDb.PrepPopulation(app);
 
